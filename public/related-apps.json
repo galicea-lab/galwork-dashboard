@@ -1,0 +1,29 @@
+{
+  "links": [
+    {
+      "title": "Dokumenty",
+      "url": "https://docs.transmem.pl",
+      "icon": "mdi:book-open-variant",
+      "description": "Pisma i sprawy"
+    },
+    {
+      "title": "Moje konto",
+      "url": "https://login.e-talar.com/realms/transmem/account",
+      "icon": "mdi:account-cog-outline",
+      "description": "Profil i hasło w Keycloak"
+    },
+    {
+      "title": "e-Doręczenia",
+      "url": "https://edoreczenia.gov.pl",
+      "icon": "mdi:email-seal-outline",
+      "description": "Skrzynka do doręczeń elektronicznych"
+    },
+    {
+      "title": "Czat",
+      "url": "https://czat.galicea.org/",
+      "icon": "mdi:email-seal-outline",
+      "description": "Wymiana komunikatów (Mattermost)"
+    }
+
+  ]
+}
