@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@galicea-lab/rjsf-widgets": "^0.1.1",
-    "@galicea-lab/nextjs-keycloak-auth": "^0.1.28",
+    "@galicea-lab/nextjs-keycloak-auth": "^0.1.29",
     "@iconify/react": "^6.0.2",
     "@next/bundle-analyzer": "^16.3.5",
     "@reduxjs/toolkit": "^2.13.0",
