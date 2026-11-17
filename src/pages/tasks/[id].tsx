@@ -12,6 +12,7 @@ import {
 import {
   TaskDetail,
   TaskQuickActions,
+  PrintActions,
   TaskClaimModal,
   TaskCompleteModal,
   LoadingSpinner,
@@ -91,6 +92,9 @@ export default function TaskDetailPage() {
 
         {/* 2026-11-13: szybkie akcje zadania (quickAction w BPMN) */}
         <TaskQuickActions task={selectedTask} />
+
+        {/* 2026-11-16: wydruki PDF z danych formularza zadania */}
+        <PrintActions instanceId={selectedTask.process_instance_id} taskId={selectedTask.id} />
 
         {/* Claim Modal */}
         <TaskClaimModal

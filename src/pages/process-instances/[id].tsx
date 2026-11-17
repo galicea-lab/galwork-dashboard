@@ -15,6 +15,7 @@ import { fetchComments, createComment } from '@/store/comments';
 import {
   ProcessInstanceDetail,
   ProcessInstanceActionModal,
+  PrintActions,
   InstanceActionType,
   LoadingSpinner,
 } from '@/components';
@@ -116,6 +117,9 @@ export default function ProcessInstanceDetailPage() {
             dispatch(fetchProcessInstance(selectedInstance.id));
           }}
         />
+
+        {/* 2026-11-16: wydruki PDF sprawy (szablony obiegu i wydruk standardowy) */}
+        <PrintActions instanceId={selectedInstance.id} />
 
         {/* Action Modal (Cancel / Suspend / Resume) */}
         <ProcessInstanceActionModal

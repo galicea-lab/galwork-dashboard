@@ -6,3 +6,4 @@ export * from './comments';
 export * from './notifications';
 export * from './events';
 export * from './forms';
+export * from './prints';
