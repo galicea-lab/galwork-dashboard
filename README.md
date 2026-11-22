@@ -3,8 +3,9 @@ Aplikacja: Galwork-Dashboard
 
 Zastosowanie: frontend - procesy i zadania użytkowników Galwork
 
-wersja beta v0.1.4
-wymaga galwork-hub (BFF) w wersji min. v0.1.4
+Wersja beta v0.1.4
+
+Wymaga galwork-hub (BFF) w wersji min. v0.1.4
 
 Dokumentacja: https://galwork.net
 
