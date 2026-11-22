@@ -97,6 +97,26 @@ export const ProcessInstanceDetail: React.FC<ProcessInstanceDetailProps> = ({
           </div>
         </div>
 
+        {/* 2026-11-17: sprawa prowadzona w trybie testowym / pomocniczym (wdrożenie obiegu) */}
+        {instance.usage_mode === 'test' && (
+          <div className="mt-5 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2">
+            <Icon icon="mdi:flask-outline" className="w-5 h-5 text-rose-600 shrink-0" />
+            <span>
+              <span className="font-bold">Sprawa testowa</span> - zapisy nie stanowią dokumentacji.
+              {instance.rollout?.previous_procedure && <> Obowiązuje: {instance.rollout.previous_procedure}.</>}
+            </span>
+          </div>
+        )}
+        {instance.usage_mode === 'auxiliary' && (
+          <div className="mt-5 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-start gap-2">
+            <Icon icon="mdi:file-swap-outline" className="w-5 h-5 text-amber-600 shrink-0" />
+            <span>
+              <span className="font-bold">Obieg pomocniczy</span> - dokument źródłowy:{' '}
+              {instance.rollout?.previous_procedure || 'poza systemem'}.
+            </span>
+          </div>
+        )}
+
         {/* 2026-11-13: krok systemowy czeka na wynik (np. podpis w Signius) */}
         {instance.next_wakeup_at && (
           <div className="mt-5 p-4 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 text-xs flex items-center justify-between gap-3 flex-wrap">

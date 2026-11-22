@@ -7,3 +7,5 @@ export * from './notifications';
 export * from './events';
 export * from './forms';
 export * from './prints';
+export * from './documents';
+export * from './discussions';

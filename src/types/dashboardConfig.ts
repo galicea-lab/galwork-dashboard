@@ -9,6 +9,7 @@
  */
 
 import type { ProcessInstanceStatus } from './processInstances';
+import type { CountMetric } from '@/api/metrics';
 
 export type WidgetSize = 'sm' | 'md' | 'lg' | 'full';
 
@@ -54,7 +55,8 @@ export interface ProcessListWidgetConfig extends WidgetConfigBase {
   limit: number;
 }
 
-export type KpiMetric = 'task-count' | 'overdue-task-count' | 'process-count' | 'notification-count';
+/** 2026-11-18: liczniki zdefiniowane raz w src/api/metrics.ts (computeCount). */
+export type KpiMetric = CountMetric;
 
 export interface KpiWidgetConfig extends WidgetConfigBase {
   type: 'kpi';

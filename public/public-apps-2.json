@@ -1,0 +1,24 @@
+{
+  "title": "Informacje publiczne i kontakt",
+  "description": "Materiały i narzędzia dostępne dla wszystkich użytkowników",
+  "links": [
+    {
+      "title": "e-Doręczenia",
+      "url": "https://edoreczenia.gov.pl",
+      "icon": "mdi:email-seal-outline",
+      "description": "Publiczna skrzynka do doręczeń elektronicznych"
+    },
+    {
+      "title": "Czat zespołu",
+      "url": "https://czat.galicea.org/",
+      "icon": "mdi:chat-outline",
+      "description": "Wymiana komunikatów (Mattermost)"
+    },
+    {
+      "title": "Polityka prywatności",
+      "url": "https://galwork.net/polityka-prywatnosci.html",
+      "icon": "mdi:shield-lock-outline",
+      "description": "Zasady przetwarzania danych (RODO) — dokument ogólny projektu"
+    }
+  ]
+}

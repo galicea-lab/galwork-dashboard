@@ -62,8 +62,14 @@ export interface ProcessModelVersionRead {
   bpmn_process_id: string;
   content_hash: string;
   published_at?: string | null;
-  published_by?: string | null;
+  published_by?: number | null; // 2026-11-17: users.id publikującego
   created_at: string;
+  /** 2026-11-17: commit git, z którego powstała wersja (synchronizacja z katalogu obiegów) */
+  git_commit?: string | null;
+  /** niezacommitowane zmiany w folderze modelu w chwili synchronizacji */
+  git_dirty?: boolean | null;
+  /** tag wydania nadany przy publikacji: model/<klucz>/v<wersja> */
+  git_tag?: string | null;
   files?: ProcessModelFileRead[];
   /** 2026-11-13: ostrzeżenia publikacji (np. proces wywoływany bez ioSpecification). */
   warnings?: string[];

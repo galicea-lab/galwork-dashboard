@@ -53,7 +53,7 @@ export default function PurchaseRequestsPage() {
           <div>
             <h1 className="text-2xl font-bold text-slate-900">Wnioski zakupowe</h1>
             <p className="text-xs text-slate-500 mt-1">
-              Obszar &bdquo;Zakupy&rdquo; - zob. galwork-book, czesc-3-obszary/dzialy/zakupy.md
+              Obszar &bdquo;Zakupy&rdquo; - zob. galwork-models-book, obszary/dzialy/zakupy.md
             </p>
           </div>
           <Link

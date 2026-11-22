@@ -1,0 +1,741 @@
+/**
+ * Prostowanie (white-label) wyglądu dashboardu przy wdrożeniu.
+ *
+ * PLIK DO EDYCJI PRZEZ WDROŻENIOWCA - nie trzeba znać Tailwinda: cała kolorystyka
+ * i podstawowe wymiary siedzą w zmiennych poniżej. Wystarczy zmienić wartość
+ * (np. `--gw-sidebar-bg`), przebudować aplikację i wygląd zmienia się w całym
+ * serwisie: pasek boczny (menu), nagłówek, stopka, tła i ramki kafelków.
+ *
+ * Kolejność ładowania (zob. src/pages/_app.tsx):
+ *   globals.css (Tailwind)  ->  custom.css (ten plik)
+ * czyli reguły z tego pliku nadpisują klasy Tailwinda o tej samej specyficzności.
+ */
+
+:root {
+  /* --- Kolor podstawowy (akcent marki) --------------------------------- */
+  --gw-brand: #2563eb;              /* przyciski, aktywne menu, linki */
+  --gw-brand-hover: #1d4ed8;
+  --gw-brand-contrast: #ffffff;     /* tekst na kolorze marki */
+
+  /* --- Strona (tło i tekst) -------------------------------------------- */
+  --gw-page-bg: #f8fafc;
+  --gw-page-text: #0f172a;
+  --gw-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Helvetica Neue', Arial, sans-serif;
+
+  /* --- Pasek boczny (menu) --------------------------------------------- */
+  --gw-sidebar-bg: #020617;         /* tło paska bocznego */
+  --gw-sidebar-text: #e2e8f0;       /* tekst pozycji menu */
+  --gw-sidebar-muted: #94a3b8;      /* nagłówki grup, stopka paska */
+  --gw-sidebar-hover-bg: rgba(148, 163, 184, 0.16);
+  --gw-sidebar-active-bg: #2563eb;  /* tło aktywnej pozycji */
+  --gw-sidebar-active-text: #ffffff;
+  --gw-sidebar-border: #1e293b;     /* linie działowe w pasku */
+  --gw-sidebar-width: 16rem;        /* 256px - pełna szerokość */
+  --gw-sidebar-width-collapsed: 5rem;
+
+  /* --- Nagłówek (górny pasek) ------------------------------------------ */
+  --gw-header-bg: #ffffff;
+  --gw-header-text: #1e293b;
+  --gw-header-border: #e2e8f0;
+  --gw-header-height: 4rem;
+
+  /* --- Stopka ----------------------------------------------------------- */
+  --gw-footer-bg: #020617;
+  --gw-footer-text: #cbd5e1;
+  --gw-footer-border: #1e293b;
+
+  /* --- Kafelki / ramki (strona startowa, pulpity) ----------------------- */
+  --gw-card-bg: #ffffff;
+  --gw-card-border: #e2e8f0;
+  --gw-card-radius: 0.75rem;
+  --gw-card-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --gw-tile-hover-border: #2563eb;
+  --gw-tile-hover-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.25);
+  --gw-tile-icon-bg: #eff6ff;
+  --gw-tile-icon-text: #2563eb;
+  --gw-badge-overdue-bg: #fff1f2;
+  --gw-badge-overdue-text: #be123c;
+}
+
+/* --- Podstawy strony --------------------------------------------------- */
+
+.gw-page {
+  background-color: var(--gw-page-bg);
+  color: var(--gw-page-text);
+  font-family: var(--gw-font-family);
+}
+
+/* --- Pasek boczny ------------------------------------------------------ */
+
+.gw-sidebar {
+  background-color: var(--gw-sidebar-bg);
+  color: var(--gw-sidebar-text);
+}
+
+.gw-sidebar-open {
+  width: var(--gw-sidebar-width);
+}
+
+.gw-sidebar-closed {
+  width: var(--gw-sidebar-width-collapsed);
+}
+
+.gw-sidebar-header {
+  border-bottom: 1px solid var(--gw-sidebar-border);
+}
+
+.gw-sidebar-title {
+  color: var(--gw-sidebar-text);
+  font-weight: 700;
+}
+
+.gw-sidebar-icon-btn {
+  color: var(--gw-sidebar-muted);
+  border-radius: 0.5rem;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.gw-sidebar-icon-btn:hover {
+  background-color: var(--gw-sidebar-hover-bg);
+  color: var(--gw-sidebar-active-text);
+}
+
+.gw-sidebar-group-title {
+  color: var(--gw-sidebar-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.gw-sidebar-link {
+  color: var(--gw-sidebar-text);
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.gw-sidebar-link:hover {
+  background-color: var(--gw-sidebar-hover-bg);
+  color: var(--gw-sidebar-active-text);
+}
+
+.gw-sidebar-link-active {
+  background-color: var(--gw-sidebar-active-bg);
+  color: var(--gw-sidebar-active-text);
+}
+
+.gw-sidebar-footer {
+  border-top: 1px solid var(--gw-sidebar-border);
+  color: var(--gw-sidebar-muted);
+}
+
+/* --- Pasek boczny na małych ekranach ---------------------------------- */
+/* Poniżej breakpointu `lg` (1024 px) pasek nie zajmuje miejsca w układzie:
+ * jest szufladą wysuwaną z lewej strony przyciskiem hamburger z nagłówka
+ * (klasa `gw-sidebar--mobile-open`). Dzięki temu treść - także sekcja
+ * "Regulacje i wdrożenia" - korzysta z całej szerokości ekranu. */
+
+@media (max-width: 1023.98px) {
+  .gw-sidebar {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: var(--gw-sidebar-width);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .gw-sidebar--mobile-open {
+    transform: translateX(0);
+  }
+
+  /* W szufladzie pasek zawsze ma pełną szerokość (bez stanu zwinięcia). */
+  .gw-sidebar-open,
+  .gw-sidebar-closed {
+    width: var(--gw-sidebar-width);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gw-sidebar {
+    transition: none;
+  }
+}
+
+/* Znaczek marki (logo) w nagłówku paska i w nagłówku strony. */
+.gw-brand-mark {
+  background-color: var(--gw-brand);
+  color: var(--gw-brand-contrast);
+}
+
+/* --- Nagłówek ---------------------------------------------------------- */
+
+.gw-header {
+  background-color: var(--gw-header-bg);
+  color: var(--gw-header-text);
+  border-bottom: 1px solid var(--gw-header-border);
+  min-height: var(--gw-header-height);
+}
+
+.gw-header-title {
+  color: var(--gw-header-text);
+}
+
+/* --- Stopka ------------------------------------------------------------ */
+
+.gw-footer {
+  background-color: var(--gw-footer-bg);
+  color: var(--gw-footer-text);
+  border-top: 1px solid var(--gw-footer-border);
+}
+
+.gw-footer a {
+  color: var(--gw-sidebar-active-text);
+  text-decoration: underline;
+}
+
+/* --- Kafelki / ramki ---------------------------------------------------- */
+
+.gw-card {
+  background-color: var(--gw-card-bg);
+  border: 1px solid var(--gw-card-border);
+  border-radius: var(--gw-card-radius);
+  box-shadow: var(--gw-card-shadow);
+}
+
+/* Kafelek będący w całości linkiem do podstrony (strona startowa, pulpity). */
+.gw-tile {
+  display: block;
+  background-color: var(--gw-card-bg);
+  border: 1px solid var(--gw-card-border);
+  border-radius: var(--gw-card-radius);
+  box-shadow: var(--gw-card-shadow);
+  transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+
+.gw-tile:hover {
+  border-color: var(--gw-tile-hover-border);
+  box-shadow: var(--gw-tile-hover-shadow);
+  transform: translateY(-1px);
+}
+
+.gw-tile-icon {
+  background-color: var(--gw-tile-icon-bg);
+  color: var(--gw-tile-icon-text);
+}
+
+/* Licznik na kafelku - duża liczba pozycji. */
+.gw-tile-count {
+  color: var(--gw-page-text);
+  font-weight: 700;
+}
+
+/* Znaczek "przeterminowane" na kafelku. */
+.gw-tile-overdue {
+  background-color: var(--gw-badge-overdue-bg);
+  color: var(--gw-badge-overdue-text);
+}
+
+/* --- Przyciski --------------------------------------------------------- */
+
+.gw-button-primary {
+  background-color: var(--gw-brand);
+  color: var(--gw-brand-contrast);
+  transition: background-color 120ms ease;
+}
+
+.gw-button-primary:hover {
+  background-color: var(--gw-brand-hover);
+}
+
+/** Nadtytuł sekcji (mały napis nad nagłówkiem), w kolorze marki. */
+.gw-eyebrow {
+  color: var(--gw-brand);
+}
+
+/* Tytuł i strzałka kafelka - podświetlenie kolorem marki przy najechaniu. */
+.gw-tile-title {
+  color: var(--gw-page-text);
+}
+
+.gw-tile:hover .gw-tile-title {
+  color: var(--gw-brand);
+}
+
+.gw-tile-arrow {
+  color: var(--gw-card-border);
+}
+
+.gw-tile:hover .gw-tile-arrow {
+  color: var(--gw-brand);
+}
+
+/* Kafelek bez linku (np. ramka z listą linków publicznych). */
+.gw-frame {
+  background-color: var(--gw-card-bg);
+  border: 1px solid var(--gw-card-border);
+  border-radius: var(--gw-card-radius);
+  box-shadow: var(--gw-card-shadow);
+}
+/* =====================================================================
+ * STRONA GŁÓWNA (adres "/") — styl nawiązujący do strony galwork-www
+ * =====================================================================
+ * Publiczna strona główna (ekran startowy, także ekran logowania) dostaje
+ * paletę i układ galwork-www: granat "marka" + złoty "akcent", hero w
+ * gradiencie, karty panelowe, ciemny pasek nagłówka.
+ *
+ * Wszystko trzyma się w zmiennych `--gw-home-*` i klasach `gw-home-*`,
+ * używanych WYŁĄCZNIE na stronie głównej, więc PODSTRONY (pulpit /home,
+ * zadania, obiegi, regulacje...) pozostają bez zmian - ich wygląd nadal
+ * opisują zmienne `--gw-*` z góry pliku.
+ *
+ * Zmiana wdrożeniowa: podmiana wartości w bloku `:root` poniżej
+ * (np. inne złoto albo jednolity kolor marki zamiast gradientu).
+ */
+
+:root {
+  /* granat (marka) */
+  --gw-home-marka-50: #f2f5fb;
+  --gw-home-marka-100: #e3e9f5;
+  --gw-home-marka-200: #c5d1e8;
+  --gw-home-marka-300: #9cb0d6;
+  --gw-home-marka-600: #3a5090;
+  --gw-home-marka-700: #2f4076;
+  --gw-home-marka-800: #28355e;
+  --gw-home-marka-900: #1e2847;
+  --gw-home-marka-950: #131a30;
+
+  /* złoto (akcent) */
+  --gw-home-akcent-100: #f9edd0;
+  --gw-home-akcent-200: #f3d99c;
+  --gw-home-akcent-300: #ebc164;
+  --gw-home-akcent-400: #e3ab3c;
+  --gw-home-akcent-500: #d18f1f;
+
+  /* powierzchnie i tekst */
+  --gw-home-panel: #ffffff;
+  --gw-home-linia: #e2e8f0;
+  --gw-home-tekst-miekki: #475569;
+  --gw-home-tekst-blady: #64748b;
+  --gw-home-tlo-jasne: #f5f7fb;
+
+  /* wymiary i cienie */
+  --gw-home-promien: 14px;
+  --gw-home-promien-duzy: 22px;
+  --gw-home-cien: 0 1px 2px rgba(19, 26, 48, 0.04),
+    0 10px 30px -18px rgba(19, 26, 48, 0.35);
+  --gw-home-cien-uniesiony: 0 2px 4px rgba(19, 26, 48, 0.05),
+    0 24px 48px -24px rgba(19, 26, 48, 0.45);
+}
+
+/* --- Nagłówek strony głównej (ciemny pasek, jak w galwork-www) --------- */
+
+/* Klasy `gw-header-*` są wspólne z podstronami - wariant `--brand`
+ * rozjaśnia je na ciemnym tle i złoci znaczek marki. */
+.gw-header--brand {
+  background: linear-gradient(180deg, rgba(19, 26, 48, 0.97), rgba(19, 26, 48, 0.93));
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.gw-header--brand .gw-header-title {
+  color: #fff;
+}
+
+.gw-header--brand .gw-brand-mark {
+  background: linear-gradient(
+    135deg,
+    var(--gw-home-akcent-300),
+    var(--gw-home-akcent-400) 55%,
+    var(--gw-home-akcent-500)
+  );
+  color: var(--gw-home-marka-950);
+  box-shadow: 0 6px 18px -6px rgba(227, 171, 60, 0.65);
+}
+
+.gw-header--brand .gw-header-user-name {
+  color: #fff;
+}
+
+.gw-header--brand .gw-header-user-mail {
+  color: rgba(203, 213, 225, 0.75);
+}
+
+.gw-header--brand .gw-header-icon-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(226, 233, 245, 0.92);
+}
+
+.gw-header--brand .gw-header-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+/* --- Hero strony głównej ---------------------------------------------- */
+
+.gw-home-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--gw-home-promien-duzy);
+  padding: 30px 24px 34px;
+  color: #fff;
+  background: radial-gradient(900px 380px at 8% -20%, rgba(74, 103, 165, 0.55), transparent 62%),
+    radial-gradient(700px 340px at 92% -10%, rgba(227, 171, 60, 0.18), transparent 60%),
+    linear-gradient(160deg, var(--gw-home-marka-900), var(--gw-home-marka-950) 58%, #0b1024);
+  box-shadow: var(--gw-home-cien-uniesiony);
+}
+
+@media (min-width: 640px) {
+  .gw-home-hero {
+    padding: 44px 46px 48px;
+  }
+}
+
+.gw-home-hero-eyebrow {
+  display: inline-block;
+  margin: 0 0 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gw-home-akcent-300);
+}
+
+.gw-home-hero-title {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.5rem);
+  font-weight: 650;
+  line-height: 1.14;
+  letter-spacing: -0.025em;
+}
+
+.gw-home-hero-lead {
+  margin-top: 16px;
+  color: rgba(226, 233, 245, 0.86);
+  font-size: clamp(0.95rem, 0.92rem + 0.2vw, 1.05rem);
+  line-height: 1.6;
+}
+
+.gw-home-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gw-home-hero-meta li {
+  margin: 0;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(226, 233, 245, 0.92);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.gw-home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+/* --- Przyciski (złoty / obrysowy) ------------------------------------- */
+
+.gw-home-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 20px;
+  border-radius: 11px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.16s ease, background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.gw-home-button:hover {
+  transform: translateY(-1px);
+}
+
+/* Akcent (złoto) - podstawowa akcja strony; ciemny tekst na złocie. */
+.gw-home-button--gold {
+  color: var(--gw-home-marka-950);
+  background: linear-gradient(
+    135deg,
+    var(--gw-home-akcent-300),
+    var(--gw-home-akcent-400) 55%,
+    var(--gw-home-akcent-500)
+  );
+  box-shadow: 0 12px 30px -14px rgba(227, 171, 60, 0.85);
+}
+
+.gw-home-button--gold:hover {
+  background: linear-gradient(
+    135deg,
+    var(--gw-home-akcent-200),
+    var(--gw-home-akcent-300) 55%,
+    var(--gw-home-akcent-400)
+  );
+}
+
+/* Obrys na ciemnym tle (hero). */
+.gw-home-button--ghost {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.26);
+}
+
+.gw-home-button--ghost:hover {
+  background: rgba(255, 255, 255, 0.13);
+}
+
+/* Obrys na jasnym tle. */
+.gw-home-button--light {
+  color: var(--gw-home-marka-800);
+  background: var(--gw-home-panel);
+  border-color: var(--gw-home-marka-200);
+}
+
+.gw-home-button--light:hover {
+  background: var(--gw-home-marka-50);
+}
+
+/* --- Sekcje strony głównej -------------------------------------------- */
+
+.gw-home-section {
+  margin-top: 30px;
+}
+
+.gw-home-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+  margin-bottom: 16px;
+}
+
+.gw-home-section-title {
+  margin: 0;
+  color: var(--gw-home-marka-900);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.gw-home-section-note {
+  font-size: 12px;
+  color: var(--gw-home-tekst-blady);
+}
+
+/* Krótkie akapity wyjaśniające pod hero - na całą szerokość strony. */
+.gw-home-nota {
+  margin: 20px 0 0;
+  color: var(--gw-home-tekst-miekki);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.gw-home-nota p + p {
+  margin-top: 8px;
+}
+
+/* --- Kafelki kategorii (linki do podstron) ---------------------------- */
+
+.gw-home-tile {
+  display: block;
+  padding: 20px;
+  border: 1px solid var(--gw-home-linia);
+  border-radius: var(--gw-home-promien);
+  background: var(--gw-home-panel);
+  box-shadow: var(--gw-home-cien);
+  text-decoration: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.gw-home-tile:hover {
+  border-color: var(--gw-home-marka-200);
+  box-shadow: var(--gw-home-cien-uniesiony);
+  transform: translateY(-2px);
+}
+
+.gw-home-tile-icon {
+  display: inline-flex;
+  height: 40px;
+  width: 40px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  border: 1px solid var(--gw-home-marka-200);
+  background: linear-gradient(135deg, var(--gw-home-marka-100), #f7f9fd);
+  color: var(--gw-home-marka-700);
+}
+
+.gw-home-tile-title {
+  color: var(--gw-home-marka-900);
+  font-weight: 650;
+  transition: color 0.18s ease;
+}
+
+.gw-home-tile:hover .gw-home-tile-title {
+  color: var(--gw-home-marka-700);
+}
+
+.gw-home-tile-count {
+  color: var(--gw-home-marka-900);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.gw-home-tile-arrow {
+  color: var(--gw-home-marka-300);
+  transition: color 0.18s ease;
+}
+
+.gw-home-tile:hover .gw-home-tile-arrow {
+  color: var(--gw-home-marka-600);
+}
+
+/* Znaczek "po terminie" - sygnał ostrzegawczy, dlatego ciepła czerwień. */
+.gw-home-tile-overdue {
+  border: 1px solid #fecdd3;
+  background: #fff1f2;
+  color: #9f1239;
+}
+
+/* --- Ramki z linkami publicznymi -------------------------------------- */
+
+.gw-home-frame {
+  padding: 20px;
+  border: 1px solid var(--gw-home-linia);
+  border-radius: var(--gw-home-promien);
+  background: var(--gw-home-panel);
+  box-shadow: var(--gw-home-cien);
+}
+
+.gw-home-frame-title {
+  margin: 0;
+  color: var(--gw-home-marka-900);
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.gw-home-frame-desc {
+  margin-top: 4px;
+  color: var(--gw-home-tekst-blady);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.gw-home-frame-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-inline: -8px;
+  padding: 8px;
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.16s ease;
+}
+
+.gw-home-frame-link:hover {
+  background: var(--gw-home-marka-50);
+}
+
+.gw-home-frame-icon {
+  display: inline-flex;
+  height: 32px;
+  width: 32px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  border: 1px solid var(--gw-home-marka-200);
+  background: var(--gw-home-marka-50);
+  color: var(--gw-home-marka-700);
+}
+
+.gw-home-frame-link-name {
+  display: block;
+  overflow: hidden;
+  color: var(--gw-home-marka-900);
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gw-home-frame-link-desc {
+  display: block;
+  overflow: hidden;
+  color: var(--gw-home-tekst-blady);
+  font-size: 11.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Stan pusty / komunikat ------------------------------------------ */
+
+.gw-home-empty {
+  padding: 34px 20px;
+  border: 1px dashed var(--gw-home-marka-200);
+  border-radius: var(--gw-home-promien);
+  background: linear-gradient(180deg, #fbfcff, var(--gw-home-tlo-jasne));
+  text-align: center;
+}
+
+.gw-home-empty-icon {
+  display: inline-flex;
+  height: 44px;
+  width: 44px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--gw-home-marka-200);
+  background: var(--gw-home-panel);
+  color: var(--gw-home-marka-700);
+}
+
+.gw-home-empty h3 {
+  margin: 0 0 4px;
+  color: var(--gw-home-marka-900);
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.gw-home-empty p {
+  margin: 0 auto 16px;
+  max-width: 44ch;
+  color: var(--gw-home-tekst-miekki);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Karta logowania korzysta z globalnych tokenów wyglądu (--gw-card-*), żeby
+ * pasowała do nagłówka i stopki; sam login nie ma paska bocznego. */
+.gw-auth > div > div {
+  background: var(--gw-card-bg);
+  border-color: var(--gw-card-border);
+  border-radius: var(--gw-card-radius);
+  box-shadow: var(--gw-card-shadow);
+}
+
+.gw-auth h1 {
+  color: var(--gw-page-text);
+}

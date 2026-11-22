@@ -1,3 +1,4 @@
+import type { ProcessRolloutRead, UsageMode } from './rollouts'; // 2026-11-17
 /**
  * Process Instances types based on OpenAPI specification
  */
@@ -45,6 +46,11 @@ export interface ProcessInstanceRead {
   parent_task_id?: string | null;
   // 2026-11-13: krok systemowy (np. podpis w Signius) czeka - kolejne sprawdzenie
   next_wakeup_at?: string | null;
+  /** 2026-11-17: tryb użycia obiegu w chwili startu sprawy (null = bez wdrożenia) */
+  usage_mode?: UsageMode | null;
+  rollout?: ProcessRolloutRead | null;
+  /** 2026-11-22: kolumny listy (`metadata_extraction_paths` wersji modelu) */
+  metadata?: Record<string, unknown>;
 }
 
 export interface PageProcessInstanceRead {
@@ -60,4 +66,10 @@ export interface ProcessInstanceFilterParams {
   status?: ProcessInstanceStatus | null;
   process_model_key?: string | null;
   parent_instance_id?: string | null; // 2026-11-13: instancje potomne
+  /** 2026-11-22: fragment tytułu, numeru albo metadanych */
+  q?: string | null;
+  /** 2026-11-22: np. `-started_at`, `m.nazwa`, `-m.data_przegladu` */
+  sort?: string | null;
+  /** 2026-11-22: filtry metadanych `m.<klucz>` (równość tekstowa) */
+  [metadataFilter: `m.${string}`]: string | undefined;
 }

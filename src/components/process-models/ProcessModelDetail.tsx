@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Icon } from '@iconify/react';
 import { Badge } from '@/components/common/Badge';
 import { ConfirmDialog } from '@/components/common/ConfirmDialog';
+import { ProcessRollouts } from '@/components/rollouts/ProcessRollouts';
 import {
   ProcessModelRead,
   ProcessModelVersionRead,
@@ -207,6 +208,9 @@ export const ProcessModelDetail: React.FC<ProcessModelDetailProps> = ({
         </div>
       </div>
 
+      {/* 2026-11-17: rejestr wdrożeń obiegu (tryb, jednostki, akt) */}
+      <ProcessRollouts processModelId={model.id} />
+
       {/* Versions Section */}
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50/50">
@@ -270,8 +274,34 @@ export const ProcessModelDetail: React.FC<ProcessModelDetailProps> = ({
                             {badge.label}
                           </Badge>
                         </div>
-                        <span className="text-[11px] font-mono text-slate-400 block">
+                        <span className="text-[11px] font-mono text-slate-400 block" title={ver.content_hash}>
                           Hash: {ver.content_hash.slice(0, 16)}...
+                        </span>
+                        {/* 2026-11-17: pochodzenie wersji z gita i tag wydania */}
+                        <span className="text-[11px] font-mono text-slate-400 flex flex-wrap items-center gap-x-3">
+                          {ver.git_commit ? (
+                            <span title={ver.git_commit}>
+                              <Icon icon="mdi:source-commit" className="inline w-3.5 h-3.5 mr-0.5" />
+                              {ver.git_commit.slice(0, 10)}
+                            </span>
+                          ) : (
+                            <span className="font-sans">poza gitem</span>
+                          )}
+                          {ver.git_dirty && (
+                            <span
+                              className="font-sans text-amber-600"
+                              title="W chwili synchronizacji folder modelu miał niezacommitowane zmiany - wersja nie odpowiada w całości żadnemu commitowi"
+                            >
+                              <Icon icon="mdi:alert-outline" className="inline w-3.5 h-3.5 mr-0.5" />
+                              niezacommitowane zmiany
+                            </span>
+                          )}
+                          {ver.git_tag && (
+                            <span className="text-emerald-700">
+                              <Icon icon="mdi:tag-outline" className="inline w-3.5 h-3.5 mr-0.5" />
+                              {ver.git_tag}
+                            </span>
+                          )}
                         </span>
                       </div>
                     </div>

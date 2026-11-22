@@ -1,7 +1,7 @@
 /**
  * Wniosek zakupowy - zob. galwork-hub: wf/schemas/wf_schemas.py
  * (PurchaseRequestCreate/Read), wf/services/purchase_request_service.py,
- * galwork-book czesc-3-obszary/dzialy/zakupy.md.
+ * galwork-models-book obszary/dzialy/zakupy.md.
  *
  * Tworzony wyłącznie przez `POST /purchase-requests` (ten plik) - NIE przez
  * generyczny "Uruchom nową instancję procesu" (StartProcessInstanceModal),

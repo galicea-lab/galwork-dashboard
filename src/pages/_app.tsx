@@ -13,6 +13,8 @@ import { AuthProvider } from '@galicea-lab/nextjs-keycloak-auth'
 
 // Global css styles
 import '@/styles/globals.css'
+// 2026-11-18: warstwa wyglądu do zmian przy wdrożeniu (musi być po Tailwindzie).
+import '@/styles/custom.css'
 
 // Extend App Props
 type ExtendedAppProps = AppProps & {
@@ -32,10 +34,10 @@ const App = (props: ExtendedAppProps) => {
       <AuthProvider keycloakConfig={{ keycloak: CONFIG.keycloak, keycloak_client: CONFIG.keycloak_client }}>
         <DictionaryProvider fetchOptions={dictionariesApi.listOptions}>
           <Head>
-            <title>Galwork Dashboard</title>
+            <title>{CONFIG.app_name}</title>
             <meta
               name='description'
-              content='Galwork Dashboard - workflow, zadania i procesy'
+              content={`${CONFIG.app_name} - workflow, zadania, regulacje i procesy`}
             />
             <meta name='keywords' content='Workflow, BPMN, Tasks, Processes' />
             <meta name='viewport' content='initial-scale=1, width=device-width' />

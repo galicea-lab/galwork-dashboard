@@ -1,0 +1,24 @@
+{
+  "title": "System Galwork",
+  "description": "Informacje o systemie dostępne bez logowania",
+  "links": [
+    {
+      "title": "Strona informacyjna",
+      "url": "https://galwork.net",
+      "icon": "mdi:web",
+      "description": "Opis systemu, zakres wdrożeń i kontakt"
+    },
+    {
+      "title": "Dokumentacja",
+      "url": "https://galwork.net/devbook/",
+      "icon": "mdi:book-open-variant",
+      "description": "Instrukcje i podręczniki użytkownika"
+    },
+    {
+      "title": "Zaloguj się",
+      "url": "/login",
+      "icon": "mdi:login",
+      "description": "Przejście do logowania (Keycloak)"
+    }
+  ]
+}

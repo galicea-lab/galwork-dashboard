@@ -9,7 +9,6 @@ import comments from './comments';
 import notifications from './notifications';
 import events from './events';
 import calendar from './calendar';
-import jform from './jform';
 
 export const store = configureStore({
   reducer: {
@@ -20,7 +19,6 @@ export const store = configureStore({
     notifications,
     events,
     calendar,
-    jform
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

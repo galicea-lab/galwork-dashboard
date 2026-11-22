@@ -22,12 +22,20 @@ COPY galwork-dashboard/package.json galwork-dashboard/package-lock.json ./
 COPY galwork-dashboard/ ./
 # Puste NEXT_PUBLIC_API_URL = wywołania względne '/v1/wf',
 # co jest zalecane w produkcji na jednej domenie.
+# pełna lista nadpisywalnych wartości src/configs/config.ts
+# (NEXT_PUBLIC_* jest wklejane na trwałe do statycznego bundla w tym kroku).
 ARG NEXT_PUBLIC_API_URL=""
 ARG NEXT_PUBLIC_KEYCLOAK_URL
 ARG NEXT_PUBLIC_KEYCLOAK_CLIENT
+ARG NEXT_PUBLIC_APP_NAME
+ARG NEXT_PUBLIC_APP_VERSION
+ARG NEXT_PUBLIC_FOOTER_TEXT
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL} \
     NEXT_PUBLIC_KEYCLOAK_URL=${NEXT_PUBLIC_KEYCLOAK_URL} \
-    NEXT_PUBLIC_KEYCLOAK_CLIENT=${NEXT_PUBLIC_KEYCLOAK_CLIENT}
+    NEXT_PUBLIC_KEYCLOAK_CLIENT=${NEXT_PUBLIC_KEYCLOAK_CLIENT} \
+    NEXT_PUBLIC_APP_NAME=${NEXT_PUBLIC_APP_NAME} \
+    NEXT_PUBLIC_APP_VERSION=${NEXT_PUBLIC_APP_VERSION} \
+    NEXT_PUBLIC_FOOTER_TEXT=${NEXT_PUBLIC_FOOTER_TEXT}
 
 RUN npm run build
 

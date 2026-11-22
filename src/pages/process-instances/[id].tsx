@@ -16,6 +16,8 @@ import {
   ProcessInstanceDetail,
   ProcessInstanceActionModal,
   PrintActions,
+  InstanceDocuments,
+  InstanceDiscussions,
   InstanceActionType,
   LoadingSpinner,
 } from '@/components';
@@ -117,6 +119,22 @@ export default function ProcessInstanceDetailPage() {
             dispatch(fetchProcessInstance(selectedInstance.id));
           }}
         />
+
+        {/*2026-11-17: dokumenty sprawy - wgranie pliku / nowej wersji, historia, sha256.
+            Krok czekający na dokument (np. rejestracja w repozytorium regulacji)
+            sprawdzany od razu po wgraniu. */}
+        <InstanceDocuments
+          instanceId={selectedInstance.id}
+          onUploaded={async () => {
+            if (selectedInstance.next_wakeup_at) {
+              await processInstancesApi.wakeProcessInstance(selectedInstance.id);
+            }
+            dispatch(fetchProcessInstance(selectedInstance.id));
+          }}
+        />
+
+        {/* 2026-11-17: dyskusje o sprawie w komunikatorze (link) */}
+        <InstanceDiscussions instanceId={selectedInstance.id} />
 
         {/* 2026-11-16: wydruki PDF sprawy (szablony obiegu i wydruk standardowy) */}
         <PrintActions instanceId={selectedInstance.id} />
