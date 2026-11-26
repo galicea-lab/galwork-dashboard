@@ -34,15 +34,6 @@ export interface CountQuery {
   status?: ProcessInstanceStatus | null;
 }
 
-/**
- * `/v1/wf/tasks/my` nie filtruje po `process_model_key` (tylko
- * `only_claimed`/`overdue`), więc przy filtrze po obiegach pobieramy większą
- * stronę i liczymy po stronie klienta. Dla licznika na pulpicie to wystarcza;
- * jeśli w przyszłości okaże się, że użytkownicy mają dziesiątki otwartych
- * zadań poza pierwszą stroną, filtr trzeba przenieść do backendu.
- */
-const FETCH_LIMIT_FOR_CLIENT_FILTER = 50;
-
 /** Maksymalna strona listy aktów (`GET /acts?limit=`). */
 const ACT_LIST_LIMIT = 500;
 
@@ -50,15 +41,18 @@ const today = () => new Date().toISOString().slice(0, 10);
 
 export async function computeCount(query: CountQuery): Promise<number> {
   switch (query.metric) {
-    case 'task-count':
-    case 'overdue-task-count': {
-      const overdue = query.metric === 'overdue-task-count';
+    // 2026-11-25: liczniki zadań ze wspólnego podsumowania skrzynki
+    // (tasksApi.summary - jedno żądanie dla wszystkich kafelków strony)
+    case 'task-count': {
+      const summary = await tasksApi.summary();
       const keys = query.processModelKeys ?? [];
-      if (keys.length > 0) {
-        const page = await tasksApi.listMyTasks({ overdue, limit: FETCH_LIMIT_FOR_CLIENT_FILTER });
-        return page.items.filter((item) => keys.includes(item.process_model_key ?? '')).length;
-      }
-      const page = await tasksApi.listMyTasks({ overdue, limit: 1 });
+      if (keys.length === 0) return summary.total;
+      return keys.reduce((sum, key) => sum + (summary.by_process_model[key] ?? 0), 0);
+    }
+    case 'overdue-task-count': {
+      const keys = query.processModelKeys ?? [];
+      if (keys.length === 0) return (await tasksApi.summary()).overdue;
+      const page = await tasksApi.listMyTasks({ overdue: true, limit: 1, process_model_keys: keys });
       return page.total;
     }
     case 'process-count': {

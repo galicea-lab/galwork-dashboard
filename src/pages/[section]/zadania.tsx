@@ -32,12 +32,11 @@ const SectionTasksPage = ({ section: slug }: SectionPageProps) => {
     if (!section) return undefined;
     let cancelled = false;
     const keys = sectionModelKeys(section);
+    // 2026-11-25: filtr obiegów sekcji po stronie huba
     tasksApi
-      .listMyTasks({ limit: FETCH_LIMIT })
+      .listMyTasks({ limit: FETCH_LIMIT, process_model_keys: keys })
       .then((page) => {
-        if (!cancelled) {
-          setLoaded({ items: page.items.filter((t) => keys.includes(t.process_model_key ?? '')), error: null });
-        }
+        if (!cancelled) setLoaded({ items: page.items, error: null });
       })
       .catch((err: unknown) => !cancelled && setLoaded({ items: [], error: extractApiError(err) }));
     return () => {

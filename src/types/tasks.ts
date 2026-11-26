@@ -43,7 +43,7 @@ export interface MyTaskItem {
   process_instance_id: string;
   process_title: string;
   process_model_name: string;
-  /** Obecne w odpowiedzi API (wf_schemas.MyTaskItem), brakowało w tym typie. */
+  /** Klucz modelu obiegu (wf_schemas.MyTaskItem; hub zwraca go od 2026-11-25). */
   process_model_key?: string | null;
   business_key?: string | null;
   /** Bieżąca wersja blokady instancji - do `expected_lock_version` przy claim/complete. */
@@ -71,4 +71,13 @@ export interface MyTaskFilterParams {
   offset?: number;
   only_claimed?: boolean;
   overdue?: boolean;
+  // 2026-11-25: zawężenie do obiegów - filtr po stronie huba
+  process_model_keys?: string[];
+}
+
+// 2026-11-25: GET /tasks/my/summary - liczniki skrzynki w jednym żądaniu
+export interface MyTaskSummary {
+  total: number;
+  overdue: number;
+  by_process_model: Record<string, number>;
 }

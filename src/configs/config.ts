@@ -36,8 +36,8 @@ export type Config = {
 
 const CONFIG: Config = {
   keycloak:
-    process.env.NEXT_PUBLIC_KEYCLOAK_URL || 'https://login.e-talar.com/realms/galwork',
-  keycloak_client: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT || 'transmem',
+    process.env.NEXT_PUBLIC_KEYCLOAK_URL || 'https://login.galwork.net/realms/galwork',
+  keycloak_client: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT || 'galwork',
   api_url: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8086/v1/wf/',
   app_name: process.env.NEXT_PUBLIC_APP_NAME || 'Galwork Dashboard',
   app_version: process.env.NEXT_PUBLIC_APP_VERSION || '0.1.4',

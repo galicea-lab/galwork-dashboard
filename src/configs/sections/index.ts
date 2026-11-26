@@ -88,8 +88,6 @@ export function sectionTiles(): TileConfig[] {
   return SECTIONS.map(sectionTile);
 }
 
-/** Strona skrzynki zadań do sprawdzenia przynależności (hub nie filtruje po modelu). */
-const TASKS_FETCH_LIMIT = 200;
 
 /**
  * 2026-11-22: slugi sekcji, w których użytkownik ma otwarte zadania albo
@@ -98,24 +96,26 @@ const TASKS_FETCH_LIMIT = 200;
  * administrator procesów). Błąd zapytania nie ukrywa sekcji.
  */
 export async function sectionsWithWork(sections: SectionConfig[] = SECTIONS): Promise<Set<string>> {
-  const tasks = await tasksApi.listMyTasks({ limit: TASKS_FETCH_LIMIT }).catch(() => null);
-  const taskKeys = new Set((tasks?.items ?? []).map((task) => task.process_model_key ?? ''));
+  // 2026-11-25: dwa żądania zamiast jednego na każdy rejestr - podsumowanie
+  // skrzynki (wspólne z kafelkami) i jedno zliczenie spraw dla pozostałych sekcji
+  const summary = await tasksApi.summary().catch(() => null);
   const result = new Set<string>();
-  await Promise.all(
-    sections.map(async (section) => {
-      const keys = sectionModelKeys(section);
-      if (tasks === null || keys.some((key) => taskKeys.has(key))) {
-        result.add(section.slug);
-        return;
-      }
-      const pages = await Promise.all(
-        keys.map((key) =>
-          processInstancesApi.listProcessInstances({ process_model_key: key, limit: 1 }).catch(() => null)
-        )
-      );
-      if (pages.some((page) => page === null || page.total > 0)) result.add(section.slug);
-    })
-  );
+  const remaining: SectionConfig[] = [];
+  sections.forEach((section) => {
+    const keys = sectionModelKeys(section);
+    if (summary === null || keys.some((key) => (summary.by_process_model[key] ?? 0) > 0)) {
+      result.add(section.slug);
+    } else {
+      remaining.push(section);
+    }
+  });
+  const keys = Array.from(new Set(remaining.flatMap(sectionModelKeys)));
+  const counts = await processInstancesApi.countByModel(keys).catch(() => null);
+  remaining.forEach((section) => {
+    if (counts === null || sectionModelKeys(section).some((key) => (counts[key] ?? 0) > 0)) {
+      result.add(section.slug);
+    }
+  });
   return result;
 }
 

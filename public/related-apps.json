@@ -8,7 +8,7 @@
     },
     {
       "title": "Moje konto",
-      "url": "https://login.e-talar.com/realms/transmem/account",
+      "url": "https://login.galwork.net/realms/galwork/account",
       "icon": "mdi:account-cog-outline",
       "description": "Profil i hasło w Keycloak"
     },

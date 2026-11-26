@@ -4,10 +4,24 @@ import {
   ProcessInstanceCreate,
   ProcessInstanceAction,
   PageProcessInstanceRead,
+  ProcessInstanceCounts,
   ProcessInstanceFilterParams,
+  ProcessInstanceStatus,
 } from '@/types/processInstances';
 
 export const processInstancesApi = {
+  /**
+   * 2026-11-25: liczba widocznych spraw dla wielu obiegów w jednym żądaniu.
+   */
+  async countByModel(processModelKeys: string[], status?: ProcessInstanceStatus): Promise<Record<string, number>> {
+    if (processModelKeys.length === 0) return {};
+    const params = new URLSearchParams();
+    processModelKeys.forEach((key) => params.append('process_model_key', key));
+    if (status) params.append('status', status);
+    const response = await apiClient.get<ProcessInstanceCounts>('/process-instances/counts', { params });
+    return response.data.counts;
+  },
+
   /**
    * Pobiera stronicowaną listę instancji procesów z opcjonalnymi filtrami.
    */

@@ -53,6 +53,11 @@ export interface ProcessInstanceRead {
   metadata?: Record<string, unknown>;
 }
 
+// 2026-11-25: GET /process-instances/counts - liczba widocznych spraw wg modelu
+export interface ProcessInstanceCounts {
+  counts: Record<string, number>;
+}
+
 export interface PageProcessInstanceRead {
   items: ProcessInstanceRead[];
   total: number;

@@ -63,7 +63,7 @@ Każde pole można też ustawić zmienną środowiskową w czasie budowania obra
 
 | Pole | Zmienna | Domyślnie (`config.ts`) |
 | --- | --- | --- |
-| `keycloak` | `NEXT_PUBLIC_KEYCLOAK_URL` | `https://login.e-talar.com/realms/galwork` |
+| `keycloak` | `NEXT_PUBLIC_KEYCLOAK_URL` | `https://login.galwork.net/realms/galwork` |
 | `keycloak_client` | `NEXT_PUBLIC_KEYCLOAK_CLIENT` | `transmem` |
 | `api_url` | `NEXT_PUBLIC_API_URL` | `http://localhost:8086/v1/wf/` (dev) |
 | `app_name` | `NEXT_PUBLIC_APP_NAME` | `Galwork Dashboard` |

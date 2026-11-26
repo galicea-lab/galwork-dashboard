@@ -1,6 +1,6 @@
 {
   "name": "galwork-dashboard",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -14,8 +14,8 @@
     "build:icons": "tsc -b src/iconify-bundle && node src/iconify-bundle/bundle-icons-react.js"
   },
   "dependencies": {
-    "@galicea-lab/nextjs-keycloak-auth": "^0.1.29",
-    "@galicea-lab/rjsf-widgets": "^0.1.1",
+    "@galicea-lab/nextjs-keycloak-auth": "^0.1.31",
+    "@galicea-lab/rjsf-widgets": "^0.1.4",
     "@iconify/react": "^6.0.2",
     "@next/bundle-analyzer": "^16.3.5",
     "@reduxjs/toolkit": "^2.13.0",
